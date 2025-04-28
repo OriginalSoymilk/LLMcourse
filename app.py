@@ -1,21 +1,19 @@
+import os
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from mistralai import Mistral
-import requests
-import os
 
 app = Flask(__name__)
 
-# Debug
-print("LINE_CHANNEL_ACCESS_TOKEN =", os.environ.get("LINE_CHANNEL_ACCESS_TOKEN"))
-print("LINE_CHANNEL_SECRET =", os.environ.get("LINE_CHANNEL_SECRET"))
-print("MISTRAL_API_KEY =", os.environ.get("MISTRAL_API_KEY"))
-
+# 初始化 LINE API 和 Mistral API
 line_bot_api = LineBotApi(os.environ.get("LINE_CHANNEL_ACCESS_TOKEN"))
 handler = WebhookHandler(os.environ.get("LINE_CHANNEL_SECRET"))
-mistral_api_key = os.environ.get("MISTRAL_API_KEY")
+api_key = os.environ.get("MISTRAL_API_KEY")
+
+# 在這裡初始化 Mistral 客戶端
+mistral_client = Mistral(api_key=api_key)
 
 @app.route("/callback", methods=['POST'])
 def callback():
