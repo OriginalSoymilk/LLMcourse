@@ -2,6 +2,7 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from mistralai import Mistral
 import requests
 import os
 
@@ -40,18 +41,17 @@ def handle_message(event):
     )
 
 def ask_mistral(user_message):
-    headers = {
-        "Authorization": f"Bearer {mistral_api_key}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "model": "mistral-7b-instruct",
-        "messages": [
-            {"role": "user", "content": user_message}
-        ]
-    }
-    response = requests.post("https://api.mistral.ai/v1/chat/completions", headers=headers, json=data)
-    return response.json()['choices'][0]['message']['content']
+    # 使用 mistralai 库呼叫 Mistral API
+    chat_response = mistral_client.chat.complete(
+        model="mistral-large-latest",  # 使用你需要的模型
+        messages=[{
+            "role": "user",
+            "content": user_message,
+        }]
+    )
+
+    # 返回 AI 的回應內容
+    return chat_response.choices[0].message.content
 
 if __name__ == "__main__":
     app.run(port=5000)
