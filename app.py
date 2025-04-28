@@ -1,14 +1,20 @@
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import requests
 import os
 
 app = Flask(__name__)
 
+# Debug
+print("LINE_CHANNEL_ACCESS_TOKEN =", os.environ.get("LINE_CHANNEL_ACCESS_TOKEN"))
+print("LINE_CHANNEL_SECRET =", os.environ.get("LINE_CHANNEL_SECRET"))
+print("MISTRAL_API_KEY =", os.environ.get("MISTRAL_API_KEY"))
+
 line_bot_api = LineBotApi(os.environ.get("LINE_CHANNEL_ACCESS_TOKEN"))
 handler = WebhookHandler(os.environ.get("LINE_CHANNEL_SECRET"))
-mistral_api_key = os.environ.get("MISTRAL_API_KEY")  # 這樣安全一點，不要硬寫死
+mistral_api_key = os.environ.get("MISTRAL_API_KEY")
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -17,7 +23,8 @@ def callback():
 
     try:
         handler.handle(body, signature)
-    except:
+    except InvalidSignatureError:
+        print("Invalid signature.")
         abort(400)
 
     return 'OK'
@@ -38,7 +45,7 @@ def ask_mistral(user_message):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "mistral-7b-instruct",  # 看你用哪個模型
+        "model": "mistral-7b-instruct",
         "messages": [
             {"role": "user", "content": user_message}
         ]
