@@ -27,6 +27,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    print("✅ 進入 handle_message")  # <== 新增這一行
     user_text = event.message.text
 
     # Step 1: 查找相關內容

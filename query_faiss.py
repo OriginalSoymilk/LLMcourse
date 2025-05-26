@@ -11,8 +11,8 @@ documents = None
 
 def load_resources():
     global model, index, documents
-
-    print("目前目錄內容：", os.listdir("."))
+    print("📂 當前目錄：", os.getcwd())
+    print("📁 檔案列表：", os.listdir("."))
 
     if model is None:
         model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -35,6 +35,7 @@ def load_resources():
             print("❌ PKL 載入失敗：", e)
 
 def search_similar_documents(query: str, top_k: int = 10) -> str:
+    print("🔍 呼叫 search_similar_documents()")
     load_resources()
     embedding = model.encode([query])
     D, I = index.search(np.array(embedding), k=top_k)
