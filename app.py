@@ -24,7 +24,7 @@ with open("nutrition_docs.pkl", "rb") as f:
     documents = pickle.load(f)
 
 # 載入句子編碼模型
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('paraphrase-MiniLM-L3-v2')
 
 @app.route("/callback", methods=['POST'])
 def callback():
