@@ -3,3 +3,6 @@ line-bot-sdk
 requests
 gunicorn
 mistralai
+sentence-transformers
+faiss-cpu
+numpy
