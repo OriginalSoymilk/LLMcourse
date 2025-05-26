@@ -28,7 +28,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_text = event.message.text
-
+    print("收到 LINE 訊息：", event.message.text)
     # Step 1: 查找相關內容
     context = search_similar_documents(user_text)
 

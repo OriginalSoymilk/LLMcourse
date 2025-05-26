@@ -12,7 +12,7 @@ documents = None
 def load_resources():
     global model, index, documents
     if model is None:
-        model = SentenceTransformer("paraphrase-MiniLM-L3-v2")
+        model = SentenceTransformer('all-MiniLM-L6-v2')
     if index is None:
         index = faiss.read_index("nutrition_index.faiss")
     if documents is None:
