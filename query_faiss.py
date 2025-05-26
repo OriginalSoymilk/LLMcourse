@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 import pickle
-
+import os
 # 初始化：只在第一次調用時載入
 model = None
 index = None
@@ -11,17 +11,28 @@ documents = None
 
 def load_resources():
     global model, index, documents
+
+    print("目前目錄內容：", os.listdir("."))
+
     if model is None:
         model = SentenceTransformer('all-MiniLM-L6-v2')
+
     if index is None:
-        print("Loading faiss...")
-        index = faiss.read_index("nutrition_index.faiss")
-        print("faiss success")
+        try:
+            print("Loading faiss...")
+            index = faiss.read_index("nutrition_index.faiss")
+            print("faiss success")
+        except Exception as e:
+            print("❌ FAISS 載入失敗：", e)
+
     if documents is None:
-        print("Loading pkl")
-        with open("nutrition_docs.pkl", "rb") as f:
-            documents = pickle.load(f)
-        print("pkl success")
+        try:
+            print("Loading pkl")
+            with open("nutrition_docs.pkl", "rb") as f:
+                documents = pickle.load(f)
+            print("pkl success")
+        except Exception as e:
+            print("❌ PKL 載入失敗：", e)
 
 def search_similar_documents(query: str, top_k: int = 10) -> str:
     load_resources()
