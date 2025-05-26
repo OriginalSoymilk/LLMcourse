@@ -23,11 +23,11 @@ def load_resources():
             documents = pickle.load(f)
         print("pkl success")
 
-def search_similar_documents(query: str, top_k: int = 5) -> str:
-    print("查詢 query：", query)
-    print("找到文件：", relevant_docs)
+def search_similar_documents(query: str, top_k: int = 10) -> str:
     load_resources()
     embedding = model.encode([query])
     D, I = index.search(np.array(embedding), k=top_k)
     relevant_docs = [documents[i] for i in I[0]]
+    print("查詢 query：", query)
+    print("找到文件：", relevant_docs)
     return "\n".join(relevant_docs)
