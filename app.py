@@ -41,7 +41,7 @@ def handle_message(event):
 def ask_mistral(user_message):
     # 使用 mistralai 库呼叫 Mistral API
     chat_response = mistral_client.chat.complete(
-        model="mistral-large-latest",  # 使用你需要的模型
+        model="mistral-small-latest",  # 使用你需要的模型
         messages=[{
             "role": "user",
             "content": user_message,
